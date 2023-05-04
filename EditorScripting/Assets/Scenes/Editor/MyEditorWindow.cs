@@ -1,28 +1,99 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
 public class MyEditorWindow : EditorWindow
 {
-    [MenuItem("MyTool/MyEditorWindow %g")] // ´ÜÃàÅ° ctrl + g
+    [MenuItem("MyTool/MyEditorWindow %g")] // ë‹¨ì¶•í‚¤ ctrl + g
     static void Open()
     {
         var window = GetWindow<MyEditorWindow>();
         window.titleContent = new GUIContent("MyTool");
     }
 
+    int intValue;
+    float floatValue;
+    Color colorvalue;
+    Gradient gradientValue = new Gradient();
+    Vector3 vector3Value;
+    Vector3Int vector3IntValue;
+    Rect rectValue;
+    UnityEngine.Object objectValue;
+    string passwordValue;
+    string tagValue;
+    UnityEngine.ParticleSystemCollisionType enumValue;
+    bool toggleValue;
+    string[] stringArr = new string[] { "string01", "string02", "string03", "string04", "string05", "string06" };
+    int selectionValue;
+
     private void OnGUI()
     {
-        GUI.Label(new Rect(250, 0, 100, 50), "GUI.Label");
-        EditorGUI.LabelField(new Rect(250, 50, 100, 50), "EditorGUI.LabelField");
+        #region ====::EditiorGUILayout::====
 
-        // LayoutÀÇ ÀÇ¹Ì´Â UnityÀÇ ÀÚµ¿ Layout systemÀ» »ç¿ëÇÑ GUI
-        GUILayout.Label("GUILayout.Label");
-        EditorGUILayout.LabelField("EditorGUILayout.LabelField");
+        // Int Field
+        intValue = EditorGUILayout.IntField("Int ê°’", intValue);
 
-        // GUI¿Í Editor GUI¸¦ ºÐ¸®ÇÑ ÀÌÀ¯
-        // Editor GUI´Â Inspector¿Í °°Àº Editor¿¡¼­¸¸ »ç¿ë °¡´É
-        // Editor»Ó ¾Æ´Ï¶ó °ÔÀÓ ³»¿¡¼­µµ »ç¿ë°¡´ÉÇÑ GUI´Â GUI¸¦ »ç¿ëÇØ¾ßÇÔ
+        // Float Field
+        floatValue = EditorGUILayout.FloatField("Float ê°’", floatValue);
+
+        // Color Field
+        colorvalue = EditorGUILayout.ColorField("Color ê°’", colorvalue);
+
+        // Gradient Field
+        gradientValue = EditorGUILayout.GradientField("Gradient ê°’", gradientValue);
+
+        // Vector3 Field
+        vector3Value = EditorGUILayout.Vector3Field("Vector3 ê°’", vector3Value);
+
+        // Vector3Int Field
+        vector3IntValue = EditorGUILayout.Vector3IntField("Vector3Int ê°’", vector3IntValue);
+
+        // Rect Field
+        rectValue = EditorGUILayout.RectField("Rect ê°’", rectValue);
+
+        // Object Field
+        objectValue = EditorGUILayout.ObjectField("Object ê°’", objectValue, typeof(GameObject), true);
+
+        // Password Field
+        passwordValue = EditorGUILayout.PasswordField("Password ê°’", passwordValue);
+
+        // Tag Field
+        tagValue = EditorGUILayout.TagField("Tag ê°’", tagValue);
+
+        EditorGUILayout.Space(15);
+
+        // Enum Type Field
+        enumValue = (UnityEngine.ParticleSystemCollisionType)EditorGUILayout.EnumPopup("Enum ê°’", enumValue);
+
+        // Slider
+        floatValue = EditorGUILayout.Slider("Slider ê°’", floatValue, 0, 100);
+
+        // HelpBox
+        EditorGUILayout.HelpBox("HelpBox", MessageType.Error);
+
+        // Toggle
+        toggleValue = EditorGUILayout.Toggle("Toggle ê°’", toggleValue);
+
+        // ì¤„ ê¸‹ê¸°
+        EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
+
+        #endregion
+
+        #region ====::GUILayout::====
+
+        // ToolBar
+        selectionValue = GUILayout.Toolbar(selectionValue, stringArr);
+        GUILayout.Space(15);
+
+        // Selection Grid
+        // https://github.com/halak/unity-editor-icons
+        selectionValue = GUILayout.SelectionGrid(selectionValue, stringArr, 2);
+
+        // Box (e.g. Texture)
+        GUILayout.Box(EditorGUIUtility.IconContent("Animation.Record"), GUILayout.Width(100), GUILayout.Height(100));
+
+        #endregion
     }
 }
+
