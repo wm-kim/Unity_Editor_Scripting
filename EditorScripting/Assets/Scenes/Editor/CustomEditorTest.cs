@@ -1,4 +1,4 @@
-using Codice.Client.BaseCommands.BranchExplorer.Layout;
+ï»¿using Codice.Client.BaseCommands.BranchExplorer.Layout;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
@@ -15,7 +15,9 @@ public class CustomEditorTest : Editor
 
     private void OnEnable()
     {
-        // µ¥ÀÌÅÍ Å¸ÀÔÀ» ¸í½ÃÇÏÁö ¾ÊÀ½ (Generic)
+        SceneView.duringSceneGui += OnSceneGUI;
+
+        // ë°ì´í„° íƒ€ì…ì„ ëª…ì‹œí•˜ì§€ ì•ŠìŒ (Generic)
         targetObjectProp = serializedObject.FindProperty($"{nameof(CustomScript.otherObject)}");
         nameProp = serializedObject.FindProperty($"{nameof(CustomScript.myName)}");
         hpProp = serializedObject.FindProperty($"{nameof(CustomScript.myHP)}");
@@ -23,31 +25,75 @@ public class CustomEditorTest : Editor
         targetRef = (CustomScript)base.target;
     }
 
+    private void OnDisable()
+    {
+        SceneView.duringSceneGui -= OnSceneGUI;
+    }
+
     public override void OnInspectorGUI()
     {
         // base.OnInspectorGUI();
 
-        // ¾îµğ¼±°¡ º¯°æµÈ °ªÀÌ ÀÖÀ» ¼ö ÀÖÀ¸¹Ç·Î ¾÷µ¥ÀÌÆ®
+        // ì–´ë””ì„ ê°€ ë³€ê²½ëœ ê°’ì´ ìˆì„ ìˆ˜ ìˆìœ¼ë¯€ë¡œ ì—…ë°ì´íŠ¸
         serializedObject.Update();
 
         if (hpProp.intValue < 500) GUI.color = Color.red;
         else GUI.color = Color.green;
 
-        hpProp.intValue = EditorGUILayout.IntSlider("HP°ª", hpProp.intValue, 0, 1000);
+        hpProp.intValue = EditorGUILayout.IntSlider("HPê°’", hpProp.intValue, 0, 1000);
 
         EditorGUILayout.BeginHorizontal();
         {
             GUI.color = Color.blue;
-            EditorGUILayout.PrefixLabel("ÀÌ¸§");
+            EditorGUILayout.PrefixLabel("ì´ë¦„");
             GUI.color = Color.white;
             nameProp.stringValue = EditorGUILayout.TextArea(nameProp.stringValue);
         }
         EditorGUILayout.EndHorizontal();
 
-        // PropertyField : ÇØ´ç PropertyÀÇ ½ÇÁ¦ type¿¡ µû¶ó µå·ÎÀ×À» ´Ù¸£°Ô Ã³¸®
+        // PropertyField : í•´ë‹¹ Propertyì˜ ì‹¤ì œ typeì— ë”°ë¼ ë“œë¡œì‰ì„ ë‹¤ë¥´ê²Œ ì²˜ë¦¬
         EditorGUILayout.PropertyField(targetObjectProp);
 
-        // »çÀÌ¿¡¼­ º¯°æµÈ °ªÀÌ ÀÖÀ» ¼ö ÀÖÀ¸¹Ç·Î Àû¿ë
+        // ì‚¬ì´ì—ì„œ ë³€ê²½ëœ ê°’ì´ ìˆì„ ìˆ˜ ìˆìœ¼ë¯€ë¡œ ì ìš©
         serializedObject.ApplyModifiedProperties();
+    }
+
+    // SceneViewì—ì„œì˜ GUIë¥¼ ê·¸ë¦¬ëŠ” í•¨ìˆ˜
+    private void OnSceneGUI(SceneView obj)
+    {
+        // SceneViewì— ì–´ë–¤ ê²ƒì„ drawingí•˜ê¸° ìœ„í•´ì„œ ì‚¬ìš©í•˜ëŠ” class
+        Handles.Label(targetRef.transform.position, $"I am : {targetRef.gameObject.name}");
+        var otherObjs = FindObjectsOfType<CustomScript>();
+
+        for (int i = 0; i < otherObjs.Length; i++)
+        {
+            if(this.targetRef != otherObjs[i])
+            {
+                var pos = otherObjs[i].transform.position;
+                Handles.DrawLine(targetRef.transform.position, pos);
+
+                Handles.color = Color.red;
+                Handles.DrawWireCube(pos, Vector3.one);
+                Handles.color = Color.white;
+            }
+        }
+
+        // ë‚´ê°€ ì„ íƒí•œ ì˜¤ë¸Œì íŠ¸ì— íë¸Œë¥¼ ê·¸ë¦°ë‹¤.
+        Handles.DrawWireCube(targetRef.transform.position, new Vector3(2, 3, 2));
+
+        Handles.BeginGUI();
+        {
+            if(GUILayout.Button("MoveRight!"))
+            {
+                targetRef.transform.position += new Vector3(1, 0, 0);
+            }
+
+            if (GUILayout.Button("MoveLeft!"))
+            {
+                targetRef.transform.position += new Vector3(-1, 0, 0);
+            }
+        }
+        Handles.EndGUI();
+
     }
 }
