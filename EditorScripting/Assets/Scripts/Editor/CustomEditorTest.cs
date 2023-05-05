@@ -1,8 +1,7 @@
-﻿using Codice.Client.BaseCommands.BranchExplorer.Layout;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
+using UnityEditor;
 
 [CustomEditor(typeof(CustomScript))]
 public class CustomEditorTest : Editor
@@ -67,7 +66,7 @@ public class CustomEditorTest : Editor
 
         for (int i = 0; i < otherObjs.Length; i++)
         {
-            if(this.targetRef != otherObjs[i])
+            if (this.targetRef != otherObjs[i])
             {
                 var pos = otherObjs[i].transform.position;
                 Handles.DrawLine(targetRef.transform.position, pos);
@@ -83,7 +82,7 @@ public class CustomEditorTest : Editor
 
         Handles.BeginGUI();
         {
-            if(GUILayout.Button("MoveRight!"))
+            if (GUILayout.Button("MoveRight!"))
             {
                 targetRef.transform.position += new Vector3(1, 0, 0);
             }

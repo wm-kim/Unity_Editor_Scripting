@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
@@ -52,7 +52,6 @@ public class LayoutTest : EditorWindow
         #endregion
 
         #region ====::Horizon && Vertical::====
-        #endregion
         for (int i = 0; i < 5; i++)
         {
             EditorGUILayout.BeginVertical();
@@ -86,14 +85,15 @@ public class LayoutTest : EditorWindow
             EditorGUILayout.EndVertical();
 
             EditorGUILayout.Space(10);
-            
-            if(i < 4)
+
+            if (i < 4)
             {
                 EditorGUILayout.LabelField("", GUI.skin.horizontalScrollbar);
             }
         }
         #endregion
 
+        #endregion
         #region ====::Area::====
 
         var offset = new Vector2(20, 40);
